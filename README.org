@@ -1,0 +1,7 @@
+#+author: RedVel
+#+name: README
+#+description: Some details about this repo.
+
+* Kinda Just Researching
+This isn't intended to necessarily be useful for anyone, this is mostly just for me to look into elf files on x86-64 Linux. That's all there is to this repo, at this point in time.
+
