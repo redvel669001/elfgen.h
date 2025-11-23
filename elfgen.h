@@ -21,9 +21,8 @@
 
 #define ELF_DEF static inline
 #include <elf.h>
-#include <stddef.h>
 #include <stdbool.h>
-#include <assert.h>
+/* #include <assert.h> */
 #include <stdlib.h>
 #include <string.h>
 
@@ -44,6 +43,24 @@ typedef enum {
   R13,
   R14,
   R15,
+  
+  EAX,
+  EBX,
+  ECX,
+  EDX,
+  ESI,
+  EDI,
+  EBP,
+  ESP,
+  R8D,
+  R9D,
+  R10D,
+  R11D,
+  R12D,
+  R13D,
+  R14D,
+  R15D,
+
   REGISTERS,
 } Register;
 
@@ -60,6 +77,12 @@ ELF_DEF void gen_add_long_form(Bytes *s, Register r, size_t add);
 
 ELF_DEF void gen_sub_short_form(Bytes *s, Register r, char sub);
 ELF_DEF void gen_sub_long_form(Bytes *s, Register r, size_t sub);
+
+ELF_DEF void gen_add_32_short_form(Bytes *s, Register r, char add);
+ELF_DEF void gen_add_32_long_form(Bytes *s, Register r, size_t add);
+
+ELF_DEF void gen_sub_32_short_form(Bytes *s, Register r, char sub);
+ELF_DEF void gen_sub_32_long_form(Bytes *s, Register r, size_t sub);
 
 ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len);
 
@@ -128,7 +151,7 @@ ELF_DEF void gen_add_long_form(Bytes *s, Register r, size_t add) {
   case R15: append_bytes(s, "\x49\x81\xc7", 3);
   }
 
-  gen_little_endian(s, add);
+  gen_little_endian(s, add, 4);
 }
 
 ELF_DEF void gen_sub_short_form(Bytes *s, Register r, char sub) {
@@ -174,7 +197,99 @@ ELF_DEF void gen_sub_long_form(Bytes *s, Register r, size_t sub) {
   case R15: append_bytes(s,  "\x49\x81\xef", 3); break;
   }
 
-  gen_little_endian(s, sub);
+  gen_little_endian(s, sub, 4);
+}
+
+ELF_DEF void gen_add_32_short_form(Bytes *s, Register r, char add) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x83\xc0", 2); break;
+  case EBX:  append_bytes(s, "\x83\xc3", 2); break;
+  case ECX:  append_bytes(s, "\x83\xc1", 2); break;
+  case EDX:  append_bytes(s, "\x83\xc2", 2); break;
+  case ESI:  append_bytes(s, "\x83\xc6", 2); break;
+  case EDI:  append_bytes(s, "\x83\xc7", 2); break;
+  case EBP:  append_bytes(s, "\x83\xc5", 2); break;
+  case ESP:  append_bytes(s, "\x83\xc4", 2); break;
+  case R8D:  append_bytes(s, "\x41\x83\xc0", 3); break;
+  case R9D:  append_bytes(s, "\x41\x83\xc1", 3); break;
+  case R10D: append_bytes(s, "\x41\x83\xc2", 3); break;
+  case R11D: append_bytes(s, "\x41\x83\xc3", 3); break;
+  case R12D: append_bytes(s, "\x41\x83\xc4", 3); break;
+  case R13D: append_bytes(s, "\x41\x83\xc5", 3); break;
+  case R14D: append_bytes(s, "\x41\x83\xc6", 3); break;
+  case R15D: append_bytes(s, "\x41\x83\xc7", 3); break;
+  }
+
+  da_append(s, add);
+}
+
+ELF_DEF void gen_add_32_long_form(Bytes *s, Register r, size_t add) {
+  switch (r) {
+  case EAX: da_append(s, 0x05); break;
+  case EBX: append_bytes(s, "\x81\xc3", 2); break;
+  case ECX: append_bytes(s, "\x81\xc1", 2); break;
+  case EDX: append_bytes(s, "\x81\xc2", 2); break;
+  case ESI: append_bytes(s, "\x81\xc6", 2); break;
+  case EDI: append_bytes(s, "\x81\xc7", 2); break;
+  case EBP: append_bytes(s, "\x81\xc5", 2); break;
+  case ESP: append_bytes(s, "\x81\xc4", 2); break;
+  case R8D: append_bytes(s, "\x41\x81\xc0", 3); break;
+  case R9D: append_bytes(s, "\x41\x81\xc1", 3); break;
+  case R10D: append_bytes(s, "\x41\x81\xc2", 3); break;
+  case R11D: append_bytes(s, "\x41\x81\xc3", 3); break;
+  case R12D: append_bytes(s, "\x41\x81\xc4", 3); break;
+  case R13D: append_bytes(s, "\x41\x81\xc5", 3); break;
+  case R14D: append_bytes(s, "\x41\x81\xc6", 3); break;
+  case R15D: append_bytes(s, "\x41\x81\xc7", 3); break;
+  }
+
+  gen_little_endian(s, add, 4);
+}
+
+ELF_DEF void gen_sub_32_short_form(Bytes *s, Register r, char sub) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x83\xe8", 2); break;
+  case EBX: append_bytes(s, "\x83\xeb", 2); break;
+  case ECX: append_bytes(s, "\x83\xe9", 2); break;
+  case EDX: append_bytes(s, "\x83\xea", 2); break;
+  case ESI: append_bytes(s, "\x83\xee", 2); break;
+  case EDI: append_bytes(s, "\x83\xef", 2); break;
+  case EBP: append_bytes(s, "\x83\xed", 2); break;
+  case ESP: append_bytes(s, "\x83\xec", 2); break;
+  case R8D: append_bytes(s, "\x41\x83\xe8", 3); break;
+  case R9D: append_bytes(s, "\x41\x83\xe9", 3); break;
+  case R10D: append_bytes(s, "\x41\x83\xea", 3); break;
+  case R11D: append_bytes(s, "\x41\x83\xeb", 3); break;
+  case R12D: append_bytes(s, "\x41\x83\xec", 3); break;
+  case R13D: append_bytes(s, "\x41\x83\xed", 3); break;
+  case R14D: append_bytes(s, "\x41\x83\xee", 3); break;
+  case R15D: append_bytes(s, "\x41\x83\xef", 3); break;
+  }
+
+  da_append(s, sub);
+}
+
+ELF_DEF void gen_sub_32_long_form(Bytes *s, Register r, size_t sub) {
+  switch (r) {
+  case EAX: da_append(s, 0x2d); break;
+  case EBX: append_bytes(s, "\x81\xeb", 2);
+  case ECX: append_bytes(s, "\x81\xe9", 2);
+  case EDX: append_bytes(s, "\x81\xea", 2);
+  case ESI: append_bytes(s, "\x81\xee", 2);
+  case EDI: append_bytes(s, "\x81\xef", 2);
+  case EBP: append_bytes(s, "\x81\xed", 2);
+  case ESP: append_bytes(s, "\x81\xec", 2);
+  case R8D: append_bytes(s, "\x41\x81\xe8", 3); break;
+  case R9D: append_bytes(s, "\x41\x81\xe9", 3); break;
+  case R10D: append_bytes(s, "\x41\x81\xea", 3); break;
+  case R11D: append_bytes(s, "\x41\x81\xeb", 3); break;
+  case R12D: append_bytes(s, "\x41\x81\xec", 3); break;
+  case R13D: append_bytes(s, "\x41\x81\xed", 3); break;
+  case R14D: append_bytes(s, "\x41\x81\xee", 3); break;
+  case R15D: append_bytes(s, "\x41\x81\xef", 3); break;
+  }
+
+  gen_little_endian(s, sub, 4);
 }
 
 ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len) {
