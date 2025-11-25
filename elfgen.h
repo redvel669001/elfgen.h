@@ -126,6 +126,9 @@ ELF_DEF void gen_imul_64_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_64(Bytes *s, Register r);
 
+ELF_DEF void gen_and_64_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_64_long_form(Bytes *s, Register r, size_t and);
+
 #define gen_little_endian_64(s, big_endian) gen_little_endian(s, big_endian, 4)
 
 // ************************* 32-bits *************************
@@ -142,6 +145,9 @@ ELF_DEF void gen_imul_32_short_form(Bytes *s, Register r, char mul);
 ELF_DEF void gen_imul_32_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_32(Bytes *s, Register r);
+
+ELF_DEF void gen_and_32_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_32_long_form(Bytes *s, Register r, size_t and);
 
 #define gen_little_endian_32(s, big_endian) gen_little_endian(s, big_endian, 4)
 
@@ -160,6 +166,9 @@ ELF_DEF void gen_imul_16_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_16(Bytes *s, Register r);
 
+ELF_DEF void gen_and_16_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_16_long_form(Bytes *s, Register r, size_t and);
+
 #define gen_little_endian_16(s, big_endian) gen_little_endian(s, big_endian, 2)
 
 // ************************* 8-bits *************************
@@ -170,6 +179,8 @@ ELF_DEF void gen_inc_8(Bytes *s, Register r);
 ELF_DEF void gen_dec_8(Bytes *s, Register r);
 
 ELF_DEF void gen_div_8(Bytes *s, Register r);
+
+ELF_DEF void gen_and_8(Bytes *s, Register r, char and);
 
 #define gen_little_endian_8(s, big_endian) gen_little_endian(s, big_endian, 1)
 
@@ -274,7 +285,7 @@ ELF_DEF void gen_sub_64_short_form(Bytes *s, Register r, char sub) {
 
 ELF_DEF void gen_sub_64_long_form(Bytes *s, Register r, size_t sub) {
   switch (r) {
-  case RAX: append_bytes(s, "\x48\x2d",      2); break;
+  case RAX: append_bytes(s,  "\x48\x2d",     2); break;
   case RBX: append_bytes(s,  "\x48\x81\xeb", 3); break;
   case RCX: append_bytes(s,  "\x48\x81\xe9", 3); break;
   case RDX: append_bytes(s,  "\x48\x81\xea", 3); break;
@@ -402,6 +413,52 @@ ELF_DEF void gen_div_64(Bytes *s, Register r) {
   case R14: append_bytes(s, "\x49\xf7\xf6", 3); break;
   case R15: append_bytes(s, "\x49\xf7\xf7", 3); break;
   }
+}
+
+ELF_DEF void gen_and_64_short_form(Bytes *s, Register r, char and) {
+  switch (r) {
+  case RAX: append_bytes(s, "\x48\x83\xe0", 3); break;
+  case RBX: append_bytes(s, "\x48\x83\xe3", 3); break;
+  case RCX: append_bytes(s, "\x48\x83\xe1", 3); break;
+  case RDX: append_bytes(s, "\x48\x83\xe2", 3); break;
+  case RSI: append_bytes(s, "\x48\x83\xe6", 3); break;
+  case RDI: append_bytes(s, "\x48\x83\xe7", 3); break;
+  case RBP: append_bytes(s, "\x48\x83\xe5", 3); break;
+  case RSP: append_bytes(s, "\x48\x83\xe4", 3); break;
+  case R8:  append_bytes(s, "\x49\x83\xe0", 3); break;
+  case R9:  append_bytes(s, "\x49\x83\xe1", 3); break;
+  case R10: append_bytes(s, "\x49\x83\xe2", 3); break;
+  case R11: append_bytes(s, "\x49\x83\xe3", 3); break;
+  case R12: append_bytes(s, "\x49\x83\xe4", 3); break;
+  case R13: append_bytes(s, "\x49\x83\xe5", 3); break;
+  case R14: append_bytes(s, "\x49\x83\xe6", 3); break;
+  case R15: append_bytes(s, "\x49\x83\xe7", 3); break;
+  }
+
+  da_append(s, and);
+}
+
+ELF_DEF void gen_and_64_long_form(Bytes *s, Register r, size_t and) {
+  switch (r) {
+  case RAX: append_bytes(s, "\x48\x25",     2); break;
+  case RBX: append_bytes(s, "\x48\x81\xe3", 3); break;
+  case RCX: append_bytes(s, "\x48\x81\xe1", 3); break;
+  case RDX: append_bytes(s, "\x48\x81\xe2", 3); break;
+  case RSI: append_bytes(s, "\x48\x81\xe6", 3); break;
+  case RDI: append_bytes(s, "\x48\x81\xe7", 3); break;
+  case RBP: append_bytes(s, "\x48\x81\xe5", 3); break;
+  case RSP: append_bytes(s, "\x48\x81\xe4", 3); break;
+  case R8:  append_bytes(s, "\x49\x81\xe0", 3); break;
+  case R9:  append_bytes(s, "\x49\x81\xe1", 3); break;
+  case R10: append_bytes(s, "\x49\x81\xe2", 3); break;
+  case R11: append_bytes(s, "\x49\x81\xe3", 3); break;
+  case R12: append_bytes(s, "\x49\x81\xe4", 3); break;
+  case R13: append_bytes(s, "\x49\x81\xe5", 3); break;
+  case R14: append_bytes(s, "\x49\x81\xe6", 3); break;
+  case R15: append_bytes(s, "\x49\x81\xe7", 3); break;
+  }
+
+  gen_little_endian(s, and, 4);
 }
 
 // ************************* 32-bits *************************
@@ -606,6 +663,52 @@ ELF_DEF void gen_div_32(Bytes *s, Register r) {
   }
 }
 
+ELF_DEF void gen_and_32_short_form(Bytes *s, Register r, char and) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x83\xe0",     2); break;
+  case EBX:  append_bytes(s, "\x83\xe3",     2); break;
+  case ECX:  append_bytes(s, "\x83\xe1",     2); break;
+  case EDX:  append_bytes(s, "\x83\xe2",     2); break;
+  case ESI:  append_bytes(s, "\x83\xe6",     2); break;
+  case EDI:  append_bytes(s, "\x83\xe7",     2); break;
+  case EBP:  append_bytes(s, "\x83\xe5",     2); break;
+  case ESP:  append_bytes(s, "\x83\xe4",     2); break;
+  case R8D:  append_bytes(s, "\x41\x83\xe0", 3); break;
+  case R9D:  append_bytes(s, "\x41\x83\xe1", 3); break;
+  case R10D: append_bytes(s, "\x41\x83\xe2", 3); break;
+  case R11D: append_bytes(s, "\x41\x83\xe3", 3); break;
+  case R12D: append_bytes(s, "\x41\x83\xe4", 3); break;
+  case R13D: append_bytes(s, "\x41\x83\xe5", 3); break;
+  case R14D: append_bytes(s, "\x41\x83\xe6", 3); break;
+  case R15D: append_bytes(s, "\x41\x83\xe7", 3); break;
+  }
+
+  da_append(s, and);
+}
+
+ELF_DEF void gen_and_32_long_form(Bytes *s, Register r, size_t and) {
+  switch (r) {
+  case EAX:  da_append(s,    0x25);              break;
+  case EBX:  append_bytes(s, "\x81\xe3",     2); break;
+  case ECX:  append_bytes(s, "\x81\xe1",     2); break;
+  case EDX:  append_bytes(s, "\x81\xe2",     2); break;
+  case ESI:  append_bytes(s, "\x81\xe6",     2); break;
+  case EDI:  append_bytes(s, "\x81\xe7",     2); break;
+  case EBP:  append_bytes(s, "\x81\xe5",     2); break;
+  case ESP:  append_bytes(s, "\x81\xe4",     2); break;
+  case R8D:  append_bytes(s, "\x41\x81\xe0", 3); break;
+  case R9D:  append_bytes(s, "\x41\x81\xe1", 3); break;
+  case R10D: append_bytes(s, "\x41\x81\xe2", 3); break;
+  case R11D: append_bytes(s, "\x41\x81\xe3", 3); break;
+  case R12D: append_bytes(s, "\x41\x81\xe4", 3); break;
+  case R13D: append_bytes(s, "\x41\x81\xe5", 3); break;
+  case R14D: append_bytes(s, "\x41\x81\xe6", 3); break;
+  case R15D: append_bytes(s, "\x41\x81\xe7", 3); break;
+  }
+
+  gen_little_endian(s, and, 4);
+}
+
 // ************************* 16-bits *************************
 ELF_DEF void gen_add_16_short_form(Bytes *s, Register r, char add) {
   switch (r) {
@@ -806,6 +909,52 @@ ELF_DEF void gen_div_16(Bytes *s, Register r) {
   }
 }
 
+ELF_DEF void gen_and_16_short_form(Bytes *s, Register r, char and) {
+  switch (r) {
+  case AX:   append_bytes(s, "\x66\x83\xe0",     3); break;
+  case BX:   append_bytes(s, "\x66\x83\xe3",     3); break;
+  case CX:   append_bytes(s, "\x66\x83\xe1",     3); break;
+  case DX:   append_bytes(s, "\x66\x83\xe2",     3); break;
+  case SI:   append_bytes(s, "\x66\x83\xe6",     3); break;
+  case DI:   append_bytes(s, "\x66\x83\xe7",     3); break;
+  case BP:   append_bytes(s, "\x66\x83\xe5",     3); break;
+  case SP:   append_bytes(s, "\x66\x83\xe4",     3); break;
+  case R8W:  append_bytes(s, "\x66\x41\x83\xe0", 4); break;
+  case R9W:  append_bytes(s, "\x66\x41\x83\xe1", 4); break;
+  case R10W: append_bytes(s, "\x66\x41\x83\xe2", 4); break;
+  case R11W: append_bytes(s, "\x66\x41\x83\xe3", 4); break;
+  case R12W: append_bytes(s, "\x66\x41\x83\xe4", 4); break;
+  case R13W: append_bytes(s, "\x66\x41\x83\xe5", 4); break;
+  case R14W: append_bytes(s, "\x66\x41\x83\xe6", 4); break;
+  case R15W: append_bytes(s, "\x66\x41\x83\xe7", 4); break;
+  }
+
+  da_append(s, and);
+}
+
+ELF_DEF void gen_and_16_long_form(Bytes *s, Register r, size_t and) {
+  switch (r) {
+  case AX:   append_bytes(s, "\x66\x25",         2); break;
+  case BX:   append_bytes(s, "\x66\x81\xe3",     3); break;
+  case CX:   append_bytes(s, "\x66\x81\xe1",     3); break;
+  case DX:   append_bytes(s, "\x66\x81\xe2",     3); break;
+  case SI:   append_bytes(s, "\x66\x81\xe6",     3); break;
+  case DI:   append_bytes(s, "\x66\x81\xe7",     3); break;
+  case BP:   append_bytes(s, "\x66\x81\xe5",     3); break;
+  case SP:   append_bytes(s, "\x66\x81\xe4",     3); break;
+  case R8W:  append_bytes(s, "\x66\x41\x81\xe0", 4); break;
+  case R9W:  append_bytes(s, "\x66\x41\x81\xe1", 4); break;
+  case R10W: append_bytes(s, "\x66\x41\x81\xe2", 4); break;
+  case R11W: append_bytes(s, "\x66\x41\x81\xe3", 4); break;
+  case R12W: append_bytes(s, "\x66\x41\x81\xe4", 4); break;
+  case R13W: append_bytes(s, "\x66\x41\x81\xe5", 4); break;
+  case R14W: append_bytes(s, "\x66\x41\x81\xe6", 4); break;
+  case R15W: append_bytes(s, "\x66\x41\x81\xe7", 4); break;
+  }
+
+  gen_little_endian(s, and, 2);
+}
+
 // ************************* 8-bits *************************
 ELF_DEF void gen_add_8(Bytes *s, Register r, char add) {
   switch (r) {
@@ -913,27 +1062,54 @@ ELF_DEF void gen_dec_8(Bytes *s, Register r) {
 
 ELF_DEF void gen_div_8(Bytes *s, Register r) {
   switch (r) {
-  case al:   append_bytes(s, "\xf6\xf0",     2); break;
-  case ah:   append_bytes(s, "\xf6\xf4",     2); break;
-  case bl:   append_bytes(s, "\xf6\xf3",     2); break;
-  case bh:   append_bytes(s, "\xf6\xf7",     2); break;
-  case cl:   append_bytes(s, "\xf6\xf1",     2); break;
-  case ch:   append_bytes(s, "\xf6\xf5",     2); break;
-  case dl:   append_bytes(s, "\xf6\xf2",     2); break;
-  case dh:   append_bytes(s, "\xf6\xf6",     2); break;
-  case sil:  append_bytes(s, "\x40\xf6\xf6", 3); break;
-  case dil:  append_bytes(s, "\x40\xf6\xf7", 3); break;
-  case bpl:  append_bytes(s, "\x40\xf6\xf5", 3); break;
-  case spl:  append_bytes(s, "\x40\xf6\xf4", 3); break;
-  case r8b:  append_bytes(s, "\x41\xf6\xf0", 3); break;
-  case r9b:  append_bytes(s, "\x41\xf6\xf1", 3); break;
-  case r10b: append_bytes(s, "\x41\xf6\xf2", 3); break;
-  case r11b: append_bytes(s, "\x41\xf6\xf3", 3); break;
-  case r12b: append_bytes(s, "\x41\xf6\xf4", 3); break;
-  case r13b: append_bytes(s, "\x41\xf6\xf5", 3); break;
-  case r14b: append_bytes(s, "\x41\xf6\xf6", 3); break;
-  case r15b: append_bytes(s, "\x41\xf6\xf7", 3); break;
+  case AL:   append_bytes(s, "\xf6\xf0",     2); break;
+  case AH:   append_bytes(s, "\xf6\xf4",     2); break;
+  case BL:   append_bytes(s, "\xf6\xf3",     2); break;
+  case BH:   append_bytes(s, "\xf6\xf7",     2); break;
+  case CL:   append_bytes(s, "\xf6\xf1",     2); break;
+  case CH:   append_bytes(s, "\xf6\xf5",     2); break;
+  case DL:   append_bytes(s, "\xf6\xf2",     2); break;
+  case DH:   append_bytes(s, "\xf6\xf6",     2); break;
+  case SIL:  append_bytes(s, "\x40\xf6\xf6", 3); break;
+  case DIL:  append_bytes(s, "\x40\xf6\xf7", 3); break;
+  case BPL:  append_bytes(s, "\x40\xf6\xf5", 3); break;
+  case SPL:  append_bytes(s, "\x40\xf6\xf4", 3); break;
+  case R8B:  append_bytes(s, "\x41\xf6\xf0", 3); break;
+  case R9B:  append_bytes(s, "\x41\xf6\xf1", 3); break;
+  case R10B: append_bytes(s, "\x41\xf6\xf2", 3); break;
+  case R11B: append_bytes(s, "\x41\xf6\xf3", 3); break;
+  case R12B: append_bytes(s, "\x41\xf6\xf4", 3); break;
+  case R13B: append_bytes(s, "\x41\xf6\xf5", 3); break;
+  case R14B: append_bytes(s, "\x41\xf6\xf6", 3); break;
+  case R15B: append_bytes(s, "\x41\xf6\xf7", 3); break;
   }
+}
+
+ELF_DEF void gen_and_8(Bytes *s, Register r, char and) {
+  switch (r) {
+  case AL:   da_append(s,    0x24);              break;
+  case AH:   append_bytes(s, "\x80\xe4",     2); break;
+  case BL:   append_bytes(s, "\x80\xe3",     2); break;
+  case BH:   append_bytes(s, "\x80\xe7",     2); break;
+  case CL:   append_bytes(s, "\x80\xe1",     2); break;
+  case CH:   append_bytes(s, "\x80\xe5",     2); break;
+  case DL:   append_bytes(s, "\x80\xe2",     2); break;
+  case DH:   append_bytes(s, "\x80\xe6",     2); break;
+  case SIL:  append_bytes(s, "\x40\x80\xe6", 3); break;
+  case DIL:  append_bytes(s, "\x40\x80\xe7", 3); break;
+  case BPL:  append_bytes(s, "\x40\x80\xe5", 3); break;
+  case SPL:  append_bytes(s, "\x40\x80\xe4", 3); break;
+  case R8B:  append_bytes(s, "\x41\x80\xe0", 3); break;
+  case R9B:  append_bytes(s, "\x41\x80\xe1", 3); break;
+  case R10B: append_bytes(s, "\x41\x80\xe2", 3); break;
+  case R11B: append_bytes(s, "\x41\x80\xe3", 3); break;
+  case R12B: append_bytes(s, "\x41\x80\xe4", 3); break;
+  case R13B: append_bytes(s, "\x41\x80\xe5", 3); break;
+  case R14B: append_bytes(s, "\x41\x80\xe6", 3); break;
+  case R15B: append_bytes(s, "\x41\x80\xe7", 3); break;
+  }
+
+  da_append(s, and);
 }
 
 #endif // ELFGEN_IMPLEMENTATION
