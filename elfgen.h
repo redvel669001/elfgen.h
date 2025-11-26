@@ -111,34 +111,41 @@ typedef struct {
 ELF_DEF void append_bytes(Bytes *s, const char *bytes, size_t len);
 ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len);
 
-// ************************* 64-bits *************************
-ELF_DEF void gen_add_64_short_form(Bytes *s, Register r, char add);
-ELF_DEF void gen_add_64_long_form(Bytes *s, Register r, size_t add);
+/*
+  1) `r` refers to register
+  2) `imm` refers to immediate values
+  3) `cl` refers to the the low 8 bits of the C register, because for
+  some reason, that seems to be treated as something special.
+ */
 
-ELF_DEF void gen_sub_64_short_form(Bytes *s, Register r, char sub);
-ELF_DEF void gen_sub_64_long_form(Bytes *s, Register r, size_t sub);
+// ************************* 64-bits *************************
+ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add);
+ELF_DEF void gen_add_64_r_imm_long_form(Bytes *s, Register r, size_t add);
+
+ELF_DEF void gen_sub_64_r_imm_short_form(Bytes *s, Register r, char sub);
+ELF_DEF void gen_sub_64_r_imm_long_form(Bytes *s, Register r, size_t sub);
 
 ELF_DEF void gen_inc_64(Bytes *s, Register r);
 ELF_DEF void gen_dec_64(Bytes *s, Register r);
 
-ELF_DEF void gen_imul_64_short_form(Bytes *s, Register r, char mul);
-ELF_DEF void gen_imul_64_long_form(Bytes *s, Register r, size_t mul);
+ELF_DEF void gen_imul_64_r_imm_short_form(Bytes *s, Register r, char mul);
+ELF_DEF void gen_imul_64_r_imm_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_64(Bytes *s, Register r);
 
-ELF_DEF void gen_and_64_short_form(Bytes *s, Register r, char and);
-ELF_DEF void gen_and_64_long_form(Bytes *s, Register r, size_t and);
+ELF_DEF void gen_and_64_r_imm_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_64_r_imm_long_form(Bytes *s, Register r, size_t and);
 
-ELF_DEF void gen_or_64_short_form(Bytes *s, Register r, char or);
-ELF_DEF void gen_or_64_long_form(Bytes *s, Register r, size_t or);
+ELF_DEF void gen_or_64_r_imm_short_form(Bytes *s, Register r, char or);
+ELF_DEF void gen_or_64_r_imm_long_form(Bytes *s, Register r, size_t or);
 
 ELF_DEF void gen_not_64(Bytes *s, Register r);
 
 #define gen_little_endian_64(s, big_endian) gen_little_endian(s, big_endian, 4)
 
 // ************************* 32-bits *************************
-ELF_DEF void gen_add_32_short_form(Bytes *s, Register r, char add);
-ELF_DEF void gen_add_32_long_form(Bytes *s, Register r, size_t add);
+ELF_DEF void gen_add_32_r_imm_short_form(Bytes *s, Register r, char add);
+ELF_DEF void gen_add_32_r_imm_long_form(Bytes *s, Register r, size_t add);
 
 ELF_DEF void gen_sub_32_short_form(Bytes *s, Register r, char sub);
 ELF_DEF void gen_sub_32_long_form(Bytes *s, Register r, size_t sub);
@@ -151,53 +158,53 @@ ELF_DEF void gen_imul_32_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_32(Bytes *s, Register r);
 
-ELF_DEF void gen_and_32_short_form(Bytes *s, Register r, char and);
-ELF_DEF void gen_and_32_long_form(Bytes *s, Register r, size_t and);
+ELF_DEF void gen_and_32_r_imm_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_32_r_imm_long_form(Bytes *s, Register r, size_t and);
 
-ELF_DEF void gen_or_32_short_form(Bytes *s, Register r, char or);
-ELF_DEF void gen_or_32_long_form(Bytes *s, Register r, size_t or);
+ELF_DEF void gen_or_32_r_imm_short_form(Bytes *s, Register r, char or);
+ELF_DEF void gen_or_32_r_imm_long_form(Bytes *s, Register r, size_t or);
 
 ELF_DEF void gen_not_32(Bytes *s, Register r);
 
 #define gen_little_endian_32(s, big_endian) gen_little_endian(s, big_endian, 4)
 
 // ************************* 16-bits *************************
-ELF_DEF void gen_add_16_short_form(Bytes *s, Register r, char add);
-ELF_DEF void gen_add_16_long_form(Bytes *s, Register r, size_t add);
+ELF_DEF void gen_add_16_r_imm_short_form(Bytes *s, Register r, char add);
+ELF_DEF void gen_add_16_r_imm_long_form(Bytes *s, Register r, size_t add);
 
-ELF_DEF void gen_sub_16_short_form(Bytes *s, Register r, char sub);
-ELF_DEF void gen_sub_16_long_form(Bytes *s, Register r, size_t sub);
+ELF_DEF void gen_sub_16_r_imm_short_form(Bytes *s, Register r, char sub);
+ELF_DEF void gen_sub_16_r_imm_long_form(Bytes *s, Register r, size_t sub);
 
 ELF_DEF void gen_inc_16(Bytes *s, Register r);
 ELF_DEF void gen_dec_16(Bytes *s, Register r);
 
-ELF_DEF void gen_imul_16_short_form(Bytes *s, Register r, char mul);
-ELF_DEF void gen_imul_16_long_form(Bytes *s, Register r, size_t mul);
+ELF_DEF void gen_imul_16_r_imm_short_form(Bytes *s, Register r, char mul);
+ELF_DEF void gen_imul_16_r_imm_long_form(Bytes *s, Register r, size_t mul);
 
 ELF_DEF void gen_div_16(Bytes *s, Register r);
 
-ELF_DEF void gen_and_16_short_form(Bytes *s, Register r, char and);
-ELF_DEF void gen_and_16_long_form(Bytes *s, Register r, size_t and);
+ELF_DEF void gen_and_16_r_imm_short_form(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_16_r_imm_long_form(Bytes *s, Register r, size_t and);
 
-ELF_DEF void gen_or_16_short_form(Bytes *s, Register r, char or);
-ELF_DEF void gen_or_16_long_form(Bytes *s, Register r, size_t or);
+ELF_DEF void gen_or_16_r_imm_short_form(Bytes *s, Register r, char or);
+ELF_DEF void gen_or_16_r_imm_long_form(Bytes *s, Register r, size_t or);
 
 ELF_DEF void gen_not_16(Bytes *s, Register r);
 
 #define gen_little_endian_16(s, big_endian) gen_little_endian(s, big_endian, 2)
 
 // ************************* 8-bits *************************
-ELF_DEF void gen_add_8(Bytes *s, Register r, char add);
-ELF_DEF void gen_sub_8(Bytes *s, Register r, char sub);
+ELF_DEF void gen_add_r_imm_8(Bytes *s, Register r, char add);
+ELF_DEF void gen_sub_r_imm_8(Bytes *s, Register r, char sub);
 
 ELF_DEF void gen_inc_8(Bytes *s, Register r);
 ELF_DEF void gen_dec_8(Bytes *s, Register r);
 
 ELF_DEF void gen_div_8(Bytes *s, Register r);
 
-ELF_DEF void gen_and_8(Bytes *s, Register r, char and);
+ELF_DEF void gen_and_r_imm_8(Bytes *s, Register r, char and);
 
-ELF_DEF void gen_or_8(Bytes *s, Register r, char or);
+ELF_DEF void gen_or_r_imm_8(Bytes *s, Register r, char or);
 
 ELF_DEF void gen_not_8(Bytes *s, Register r);
 
@@ -233,7 +240,7 @@ ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len) {
 }
 
 // ************************* 64-bits *************************
-ELF_DEF void gen_add_64_short_form(Bytes *s, Register r, char add) {
+ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x83\xc0", 3); break;
   case RBX: append_bytes(s, "\x48\x83\xc3", 3); break;
@@ -256,7 +263,7 @@ ELF_DEF void gen_add_64_short_form(Bytes *s, Register r, char add) {
   da_append(s, add);
 }
 
-ELF_DEF void gen_add_64_long_form(Bytes *s, Register r, size_t add) {
+ELF_DEF void gen_add_64_r_imm_long_form(Bytes *s, Register r, size_t add) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x05",     2); break;
   case RBX: append_bytes(s, "\x48\x81\xc3", 3); break;
@@ -279,7 +286,7 @@ ELF_DEF void gen_add_64_long_form(Bytes *s, Register r, size_t add) {
   gen_little_endian(s, add, 4);
 }
 
-ELF_DEF void gen_sub_64_short_form(Bytes *s, Register r, char sub) {
+ELF_DEF void gen_sub_64_r_imm_short_form(Bytes *s, Register r, char sub) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x83\xe8", 3); break;
   case RBX: append_bytes(s, "\x48\x83\xeb", 3); break;
@@ -302,7 +309,7 @@ ELF_DEF void gen_sub_64_short_form(Bytes *s, Register r, char sub) {
   da_append(s, sub);
 }
 
-ELF_DEF void gen_sub_64_long_form(Bytes *s, Register r, size_t sub) {
+ELF_DEF void gen_sub_64_r_imm_long_form(Bytes *s, Register r, size_t sub) {
   switch (r) {
   case RAX: append_bytes(s,  "\x48\x2d",     2); break;
   case RBX: append_bytes(s,  "\x48\x81\xeb", 3); break;
@@ -367,7 +374,7 @@ ELF_DEF void gen_dec_64(Bytes *s, Register r) {
   }
 }
 
-ELF_DEF void gen_imul_64_short_form(Bytes *s, Register r, char mul) {
+ELF_DEF void gen_imul_64_r_imm_short_form(Bytes *s, Register r, char mul) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x6b\xc0", 3); break;
   case RBX: append_bytes(s, "\x48\x6b\xdb", 3); break;
@@ -390,7 +397,7 @@ ELF_DEF void gen_imul_64_short_form(Bytes *s, Register r, char mul) {
   da_append(s, mul);
 }
 
-ELF_DEF void gen_imul_64_long_form(Bytes *s, Register r, size_t mul) {
+ELF_DEF void gen_imul_64_r_imm_long_form(Bytes *s, Register r, size_t mul) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x69\xc0", 3); break;
   case RBX: append_bytes(s, "\x48\x69\xdb", 3); break;
@@ -434,7 +441,7 @@ ELF_DEF void gen_div_64(Bytes *s, Register r) {
   }
 }
 
-ELF_DEF void gen_and_64_short_form(Bytes *s, Register r, char and) {
+ELF_DEF void gen_and_64_r_imm_short_form(Bytes *s, Register r, char and) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x83\xe0", 3); break;
   case RBX: append_bytes(s, "\x48\x83\xe3", 3); break;
@@ -457,7 +464,7 @@ ELF_DEF void gen_and_64_short_form(Bytes *s, Register r, char and) {
   da_append(s, and);
 }
 
-ELF_DEF void gen_and_64_long_form(Bytes *s, Register r, size_t and) {
+ELF_DEF void gen_and_64_r_imm_long_form(Bytes *s, Register r, size_t and) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x25",     2); break;
   case RBX: append_bytes(s, "\x48\x81\xe3", 3); break;
@@ -480,7 +487,7 @@ ELF_DEF void gen_and_64_long_form(Bytes *s, Register r, size_t and) {
   gen_little_endian(s, and, 4);
 }
 
-ELF_DEF void gen_or_64_short_form(Bytes *s, Register r, char or) {
+ELF_DEF void gen_or_64_r_imm_short_form(Bytes *s, Register r, char or) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x83\xc8", 3); break;
   case RBX: append_bytes(s, "\x48\x83\xcb", 3); break;
@@ -503,7 +510,7 @@ ELF_DEF void gen_or_64_short_form(Bytes *s, Register r, char or) {
   da_append(s, or);
 }
 
-ELF_DEF void gen_or_64_long_form(Bytes *s, Register r, size_t or) {
+ELF_DEF void gen_or_64_r_imm_long_form(Bytes *s, Register r, size_t or) {
   switch (r) {
   case RAX: append_bytes(s, "\x48\x0d",     2); break;
   case RBX: append_bytes(s, "\x48\x81\xcb", 3); break;
@@ -548,7 +555,7 @@ ELF_DEF void gen_not_64(Bytes *s, Register r) {
 }
 
 // ************************* 32-bits *************************
-ELF_DEF void gen_add_32_short_form(Bytes *s, Register r, char add) {
+ELF_DEF void gen_add_32_r_imm_short_form(Bytes *s, Register r, char add) {
   switch (r) {
   case EAX:  append_bytes(s, "\x83\xc0",     2); break;
   case EBX:  append_bytes(s, "\x83\xc3",     2); break;
@@ -571,7 +578,7 @@ ELF_DEF void gen_add_32_short_form(Bytes *s, Register r, char add) {
   da_append(s, add);
 }
 
-ELF_DEF void gen_add_32_long_form(Bytes *s, Register r, size_t add) {
+ELF_DEF void gen_add_32_r_imm_long_form(Bytes *s, Register r, size_t add) {
   switch (r) {
   case EAX: da_append(s,    0x05);               break;
   case EBX: append_bytes(s, "\x81\xc3",      2); break;
@@ -749,7 +756,7 @@ ELF_DEF void gen_div_32(Bytes *s, Register r) {
   }
 }
 
-ELF_DEF void gen_and_32_short_form(Bytes *s, Register r, char and) {
+ELF_DEF void gen_and_32_r_imm_short_form(Bytes *s, Register r, char and) {
   switch (r) {
   case EAX:  append_bytes(s, "\x83\xe0",     2); break;
   case EBX:  append_bytes(s, "\x83\xe3",     2); break;
@@ -772,7 +779,7 @@ ELF_DEF void gen_and_32_short_form(Bytes *s, Register r, char and) {
   da_append(s, and);
 }
 
-ELF_DEF void gen_and_32_long_form(Bytes *s, Register r, size_t and) {
+ELF_DEF void gen_and_32_r_imm_long_form(Bytes *s, Register r, size_t and) {
   switch (r) {
   case EAX:  da_append(s,    0x25);              break;
   case EBX:  append_bytes(s, "\x81\xe3",     2); break;
@@ -795,7 +802,7 @@ ELF_DEF void gen_and_32_long_form(Bytes *s, Register r, size_t and) {
   gen_little_endian(s, and, 4);
 }
 
-ELF_DEF void gen_or_32_short_form(Bytes *s, Register r, char or) {
+ELF_DEF void gen_or_32_r_imm_short_form(Bytes *s, Register r, char or) {
   switch (r) {
   case EAX:  append_bytes(s, "\x83\xc8",     2); break;
   case EBX:  append_bytes(s, "\x83\xcb",     2); break;
@@ -818,7 +825,7 @@ ELF_DEF void gen_or_32_short_form(Bytes *s, Register r, char or) {
   da_append(s, or);
 }
 
-ELF_DEF void gen_or_32_long_form(Bytes *s, Register r, size_t or) {
+ELF_DEF void gen_or_32_r_imm_long_form(Bytes *s, Register r, size_t or) {
   switch (r) {
   case EAX:  da_append(s,    0x0d);              break;
   case EBX:  append_bytes(s, "\x81\xcb",     2); break;
@@ -863,7 +870,7 @@ ELF_DEF void gen_not_32(Bytes *s, Register r) {
 }
 
 // ************************* 16-bits *************************
-ELF_DEF void gen_add_16_short_form(Bytes *s, Register r, char add) {
+ELF_DEF void gen_add_16_r_imm_short_form(Bytes *s, Register r, char add) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x83\xc0",     3); break;
   case BX:   append_bytes(s, "\x66\x83\xc3",     3); break;
@@ -886,7 +893,7 @@ ELF_DEF void gen_add_16_short_form(Bytes *s, Register r, char add) {
   da_append(s, add);
 }
 
-ELF_DEF void gen_add_16_long_form(Bytes *s, Register r, size_t add) {
+ELF_DEF void gen_add_16_r_imm_long_form(Bytes *s, Register r, size_t add) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x05",         2); break;
   case BX:   append_bytes(s, "\x66\x81\xc3",     3); break;
@@ -909,7 +916,7 @@ ELF_DEF void gen_add_16_long_form(Bytes *s, Register r, size_t add) {
   gen_little_endian(s, add, 2);
 }
 
-ELF_DEF void gen_sub_16_short_form(Bytes *s, Register r, char sub) {
+ELF_DEF void gen_sub_16_r_imm_short_form(Bytes *s, Register r, char sub) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x83\xe8",     3); break;
   case BX:   append_bytes(s, "\x66\x83\xeb",     3); break;
@@ -932,7 +939,7 @@ ELF_DEF void gen_sub_16_short_form(Bytes *s, Register r, char sub) {
   da_append(s, sub);
 }
 
-ELF_DEF void gen_sub_16_long_form(Bytes *s, Register r, size_t sub) {
+ELF_DEF void gen_sub_16_r_imm_long_form(Bytes *s, Register r, size_t sub) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x2d",         2); break;
   case BX:   append_bytes(s, "\x66\x81\xeb",     3); break;
@@ -997,7 +1004,7 @@ ELF_DEF void gen_dec_16(Bytes *s, Register r) {
   }  
 }
 
-ELF_DEF void gen_imul_16_short_form(Bytes *s, Register r, char mul) {
+ELF_DEF void gen_imul_16_r_imm_short_form(Bytes *s, Register r, char mul) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x6b\xc0",     3); break;
   case BX:   append_bytes(s, "\x66\x6b\xdb",     3); break;
@@ -1020,7 +1027,7 @@ ELF_DEF void gen_imul_16_short_form(Bytes *s, Register r, char mul) {
   da_append(s, mul);
 }
 
-ELF_DEF void gen_imul_16_long_form(Bytes *s, Register r, size_t mul) {
+ELF_DEF void gen_imul_16_r_imm_long_form(Bytes *s, Register r, size_t mul) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x69\xc0",     3); break;
   case BX:   append_bytes(s, "\x66\x69\xdb",     3); break;
@@ -1062,7 +1069,7 @@ ELF_DEF void gen_div_16(Bytes *s, Register r) {
   }
 }
 
-ELF_DEF void gen_and_16_short_form(Bytes *s, Register r, char and) {
+ELF_DEF void gen_and_16_r_imm_short_form(Bytes *s, Register r, char and) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x83\xe0",     3); break;
   case BX:   append_bytes(s, "\x66\x83\xe3",     3); break;
@@ -1085,7 +1092,7 @@ ELF_DEF void gen_and_16_short_form(Bytes *s, Register r, char and) {
   da_append(s, and);
 }
 
-ELF_DEF void gen_and_16_long_form(Bytes *s, Register r, size_t and) {
+ELF_DEF void gen_and_16_r_imm_long_form(Bytes *s, Register r, size_t and) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x25",         2); break;
   case BX:   append_bytes(s, "\x66\x81\xe3",     3); break;
@@ -1108,7 +1115,7 @@ ELF_DEF void gen_and_16_long_form(Bytes *s, Register r, size_t and) {
   gen_little_endian(s, and, 2);
 }
 
-ELF_DEF void gen_or_16_short_form(Bytes *s, Register r, char or) {
+ELF_DEF void gen_or_16_r_imm_short_form(Bytes *s, Register r, char or) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x83\xc8",     3); break;
   case BX:   append_bytes(s, "\x66\x83\xcb",     3); break;
@@ -1131,7 +1138,7 @@ ELF_DEF void gen_or_16_short_form(Bytes *s, Register r, char or) {
   da_append(s, or);
 }
 
-ELF_DEF void gen_or_16_long_form(Bytes *s, Register r, size_t or) {
+ELF_DEF void gen_or_16_r_imm_long_form(Bytes *s, Register r, size_t or) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x0d",         2); break;
   case BX:   append_bytes(s, "\x66\x81\xcb",     3); break;
@@ -1176,7 +1183,7 @@ ELF_DEF void gen_not_16(Bytes *s, Register r) {
 }
 
 // ************************* 8-bits *************************
-ELF_DEF void gen_add_8(Bytes *s, Register r, char add) {
+ELF_DEF void gen_add_r_imm_8(Bytes *s, Register r, char add) {
   switch (r) {
   case AL:   da_append(s,    0x04);              break;
   case AH:   append_bytes(s, "\x80\xc4",     2); break;
@@ -1203,7 +1210,7 @@ ELF_DEF void gen_add_8(Bytes *s, Register r, char add) {
   da_append(s, add);
 }
 
-ELF_DEF void gen_sub_8(Bytes *s, Register r, char sub) {
+ELF_DEF void gen_sub_r_imm_8(Bytes *s, Register r, char sub) {
   switch (r) {
   case AL:   da_append(s,    0x2c);              break;
   case AH:   append_bytes(s, "\x80\xec",     2); break;
@@ -1305,7 +1312,7 @@ ELF_DEF void gen_div_8(Bytes *s, Register r) {
   }
 }
 
-ELF_DEF void gen_and_8(Bytes *s, Register r, char and) {
+ELF_DEF void gen_and_r_imm_8(Bytes *s, Register r, char and) {
   switch (r) {
   case AL:   da_append(s,    0x24);              break;
   case AH:   append_bytes(s, "\x80\xe4",     2); break;
@@ -1332,7 +1339,7 @@ ELF_DEF void gen_and_8(Bytes *s, Register r, char and) {
   da_append(s, and);
 }
 
-ELF_DEF void gen_or_8(Bytes *s, Register r, char or) {
+ELF_DEF void gen_or_r_imm_8(Bytes *s, Register r, char or) {
   switch (r) {
   case AL:   da_append(s,    0x0c);              break;
   case AH:   append_bytes(s, "\x80\xcc",     2); break;
@@ -1361,26 +1368,26 @@ ELF_DEF void gen_or_8(Bytes *s, Register r, char or) {
 
 ELF_DEF void gen_not_8(Bytes *s, Register r) {
   switch (r) {
-  case AL:   append_bytes(s, "\xf6\xd0",     2) break;
-  case AH:   append_bytes(s, "\xf6\xd4",     2) break;
-  case BL:   append_bytes(s, "\xf6\xd3",     2) break;
-  case BH:   append_bytes(s, "\xf6\xd7",     2) break;
-  case CL:   append_bytes(s, "\xf6\xd1",     2) break;
-  case CH:   append_bytes(s, "\xf6\xd5",     2) break;
-  case DL:   append_bytes(s, "\xf6\xd2",     2) break;
-  case DH:   append_bytes(s, "\xf6\xd6",     2) break;
-  case SIL:  append_bytes(s, "\x40\xf6\xd6", 3) break;
-  case DIL:  append_bytes(s, "\x40\xf6\xd7", 3) break;
-  case BPL:  append_bytes(s, "\x40\xf6\xd5", 3) break;
-  case SPL:  append_bytes(s, "\x40\xf6\xd4", 3) break;
-  case R8B:  append_bytes(s, "\x41\xf6\xd0", 3) break;
-  case R9B:  append_bytes(s, "\x41\xf6\xd1", 3) break;
-  case R10B: append_bytes(s, "\x41\xf6\xd2", 3) break;
-  case R11B: append_bytes(s, "\x41\xf6\xd3", 3) break;
-  case R12B: append_bytes(s, "\x41\xf6\xd4", 3) break;
-  case R13B: append_bytes(s, "\x41\xf6\xd5", 3) break;
-  case R14B: append_bytes(s, "\x41\xf6\xd6", 3) break;
-  case R15B: append_bytes(s, "\x41\xf6\xd7", 3) break;
+  case AL:   append_bytes(s, "\xf6\xd0",     2); break;
+  case AH:   append_bytes(s, "\xf6\xd4",     2); break;
+  case BL:   append_bytes(s, "\xf6\xd3",     2); break;
+  case BH:   append_bytes(s, "\xf6\xd7",     2); break;
+  case CL:   append_bytes(s, "\xf6\xd1",     2); break;
+  case CH:   append_bytes(s, "\xf6\xd5",     2); break;
+  case DL:   append_bytes(s, "\xf6\xd2",     2); break;
+  case DH:   append_bytes(s, "\xf6\xd6",     2); break;
+  case SIL:  append_bytes(s, "\x40\xf6\xd6", 3); break;
+  case DIL:  append_bytes(s, "\x40\xf6\xd7", 3); break;
+  case BPL:  append_bytes(s, "\x40\xf6\xd5", 3); break;
+  case SPL:  append_bytes(s, "\x40\xf6\xd4", 3); break;
+  case R8B:  append_bytes(s, "\x41\xf6\xd0", 3); break;
+  case R9B:  append_bytes(s, "\x41\xf6\xd1", 3); break;
+  case R10B: append_bytes(s, "\x41\xf6\xd2", 3); break;
+  case R11B: append_bytes(s, "\x41\xf6\xd3", 3); break;
+  case R12B: append_bytes(s, "\x41\xf6\xd4", 3); break;
+  case R13B: append_bytes(s, "\x41\xf6\xd5", 3); break;
+  case R14B: append_bytes(s, "\x41\xf6\xd6", 3); break;
+  case R15B: append_bytes(s, "\x41\xf6\xd7", 3); break;
   }
 }
 
