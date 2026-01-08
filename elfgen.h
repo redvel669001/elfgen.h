@@ -1244,22 +1244,22 @@ ELF_DEF void gen_shl_32_r_cl(Bytes *s, Register r) {
 
 ELF_DEF void gen_sar_32_r_1(Bytes *s, Register r) {
   switch (r) {
-  case EAX:  append_byets(s,"\xd1\xf8",     2); break;
-  case EBX:  append_byets(s,"\xd1\xfb",     2); break;
-  case ECX:  append_byets(s,"\xd1\xf9",     2); break;
-  case EDX:  append_byets(s,"\xd1\xfa",     2); break;
-  case ESI:  append_byets(s,"\xd1\xfe",     2); break;
-  case EDI:  append_byets(s,"\xd1\xff",     2); break;
-  case EBP:  append_byets(s,"\xd1\xfd",     2); break;
-  case ESP:  append_byets(s,"\xd1\xfc",     2); break;
-  case R8D:  append_byets(s,"\x41\xd1\xf8", 3); break;
-  case R9D:  append_byets(s,"\x41\xd1\xf9", 3); break;
-  case R10D: append_byets(s,"\x41\xd1\xfa", 3); break;
-  case R11D: append_byets(s,"\x41\xd1\xfb", 3); break;
-  case R12D: append_byets(s,"\x41\xd1\xfc", 3); break;
-  case R13D: append_byets(s,"\x41\xd1\xfd", 3); break;
-  case R14D: append_byets(s,"\x41\xd1\xfe", 3); break;
-  case R15D: append_byets(s,"\x41\xd1\xff", 3); break;
+  case EAX:  append_bytes(s,"\xd1\xf8",     2); break;
+  case EBX:  append_bytes(s,"\xd1\xfb",     2); break;
+  case ECX:  append_bytes(s,"\xd1\xf9",     2); break;
+  case EDX:  append_bytes(s,"\xd1\xfa",     2); break;
+  case ESI:  append_bytes(s,"\xd1\xfe",     2); break;
+  case EDI:  append_bytes(s,"\xd1\xff",     2); break;
+  case EBP:  append_bytes(s,"\xd1\xfd",     2); break;
+  case ESP:  append_bytes(s,"\xd1\xfc",     2); break;
+  case R8D:  append_bytes(s,"\x41\xd1\xf8", 3); break;
+  case R9D:  append_bytes(s,"\x41\xd1\xf9", 3); break;
+  case R10D: append_bytes(s,"\x41\xd1\xfa", 3); break;
+  case R11D: append_bytes(s,"\x41\xd1\xfb", 3); break;
+  case R12D: append_bytes(s,"\x41\xd1\xfc", 3); break;
+  case R13D: append_bytes(s,"\x41\xd1\xfd", 3); break;
+  case R14D: append_bytes(s,"\x41\xd1\xfe", 3); break;
+  case R15D: append_bytes(s,"\x41\xd1\xff", 3); break;
   }
 }
 
