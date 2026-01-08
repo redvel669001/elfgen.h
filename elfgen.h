@@ -118,6 +118,10 @@ ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len);
   some reason, that seems to be treated as something special.
  */
 
+// ************************* jmp etc *************************
+ELF_DEF void gen_jmp_imm_short_form(Bytes *s, char jmp);
+ELF_DEF void gen_jmp_imm_long_form(Bytes *s, size_t jmp);
+
 // ************************* 64-bits *************************
 ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add);
 ELF_DEF void gen_add_64_r_imm_long_form(Bytes *s, Register r, size_t add);
@@ -285,6 +289,17 @@ ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len) {
     char c = (big_endian >> (i * 8)) & 0xFF;
     da_append(s, c);
   }
+}
+
+// ************************* jmp etc *************************
+ELF_DEF void gen_jmp_imm_short_form(Bytes *s, char jmp) {
+  da_append(s, 0xeb);
+  da_append(s, jmp - 1);
+}
+
+ELF_DEF void gen_jmp_imm_long_form(Bytes *s, size_t jmp) {
+  da_append(s, 0xe9);
+  gen_little_endian(s, jmp, 4);
 }
 
 // ************************* 64-bits *************************
