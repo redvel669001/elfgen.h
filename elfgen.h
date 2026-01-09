@@ -190,6 +190,10 @@ ELF_DEF void gen_cmp_64_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
 ELF_DEF void gen_pop_64(Bytes *s, Register r);
 
+ELF_DEF void gen_jmp_r_64(Bytes *s, Register r);
+
+ELF_DEF void gen_call_r_64(Bytes *s, Register r);
+
 #define gen_little_endian_64(s, big_endian) gen_little_endian(s, big_endian, 4)
 
 // ************************* 32-bits *************************
@@ -231,6 +235,10 @@ ELF_DEF void gen_cmp_32_r_imm_short_form(Bytes *s, Register r, char cmp);
 ELF_DEF void gen_cmp_32_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
 ELF_DEF void gen_pop_32(Bytes *s, Register r);
+
+ELF_DEF void gen_jmp_r_32(Bytes *s, Register r);
+
+ELF_DEF void gen_call_r_32(Bytes *s, Register r);
 
 #define gen_little_endian_32(s, big_endian) gen_little_endian(s, big_endian, 4)
 
@@ -274,6 +282,10 @@ ELF_DEF void gen_cmp_16_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
 ELF_DEF void gen_pop_16(Bytes *s, Register r);
 
+ELF_DEF void gen_jmp_r_16(Bytes *s, Register r);
+
+ELF_DEF void gen_call_r_16(Bytes *s, Register r);
+
 #define gen_little_endian_16(s, big_endian) gen_little_endian(s, big_endian, 2)
 
 // ************************* 8-bits *************************
@@ -306,6 +318,10 @@ ELF_DEF void gen_sar_8_r_cl(Bytes *s, Register r);
 ELF_DEF void gen_cmp_r_imm_8(Bytes *s, Register r, char cmp);
 
 ELF_DEF void gen_pop_8(Bytes *s, Register r);
+
+ELF_DEF void gen_jmp_r_8(Bytes *s, Register r);
+
+ELF_DEF void gen_call_r_8(Bytes *s, Register r);
 
 #define gen_little_endian_8(s, big_endian) gen_little_endian(s, big_endian, 1)
 
@@ -1018,6 +1034,48 @@ ELF_DEF void gen_pop_64(Bytes *s, Register r) {
   }
 }
 
+ELF_DEF void gen_jmp_r_64(Bytes *s, Register r) {
+  switch (r) {
+  case RAX: append_bytes(s, "\xff\xe0", 2); break;
+  case RBX: append_bytes(s, "\xff\xe3", 2); break;
+  case RCX: append_bytes(s, "\xff\xe1", 2); break;
+  case RDX: append_bytes(s, "\xff\xe2", 2); break;
+  case RSI: append_bytes(s, "\xff\xe6", 2); break;
+  case RDI: append_bytes(s, "\xff\xe7", 2); break;
+  case RBP: append_bytes(s, "\xff\xe5", 2); break;
+  case RSP: append_bytes(s, "\xff\xe4", 2); break;
+  case R8: append_bytes(s, "\x41\xff\xe0", 3); break;
+  case R9: append_bytes(s, "\x41\xff\xe1", 3); break;
+  case R10: append_bytes(s, "\x41\xff\xe2", 3); break;
+  case R11: append_bytes(s, "\x41\xff\xe3", 3); break;
+  case R12: append_bytes(s, "\x41\xff\xe4", 3); break;
+  case R13: append_bytes(s, "\x41\xff\xe5", 3); break;
+  case R14: append_bytes(s, "\x41\xff\xe6", 3); break;
+  case R15: append_bytes(s, "\x41\xff\xe7", 3); break;
+  }
+}
+
+ELF_DEF void gen_call_r_64(Bytes *s, Register r) {
+  switch (r) {
+  case RAX: append_bytes(s, "\xff\xd0",     2); break;
+  case RBX: append_bytes(s, "\xff\xd3",     2); break;
+  case RCX: append_bytes(s, "\xff\xd1",     2); break;
+  case RDX: append_bytes(s, "\xff\xd2",     2); break;
+  case RSI: append_bytes(s, "\xff\xd6",     2); break;
+  case RDI: append_bytes(s, "\xff\xd7",     2); break;
+  case RBP: append_bytes(s, "\xff\xd5",     2); break;
+  case RSP: append_bytes(s, "\xff\xd4",     2); break;
+  case R8:  append_bytes(s, "\x41\xff\xd0", 3); break;
+  case R9:  append_bytes(s, "\x41\xff\xd1", 3); break;
+  case R10: append_bytes(s, "\x41\xff\xd2", 3); break;
+  case R11: append_bytes(s, "\x41\xff\xd3", 3); break;
+  case R12: append_bytes(s, "\x41\xff\xd4", 3); break;
+  case R13: append_bytes(s, "\x41\xff\xd5", 3); break;
+  case R14: append_bytes(s, "\x41\xff\xd6", 3); break;
+  case R15: append_bytes(s, "\x41\xff\xd7", 3); break;
+  }
+}
+
 // ************************* 32-bits *************************
 ELF_DEF void gen_add_32_r_imm_short_form(Bytes *s, Register r, char add) {
   switch (r) {
@@ -1575,6 +1633,14 @@ ELF_DEF void gen_cmp_32_r_imm_long_form(Bytes *s, Register r, size_t cmp) {
 }
 
 ELF_DEF void gen_pop_32(Bytes *s, Register r) {
+  // Doesn't exist apparently?
+}
+
+ELF_DEF void gen_jmp_r_32(Bytes *s, Register r) {
+  // Doesn't exist apparently?
+}
+
+ELF_DEF void gen_call_r_32(Bytes *s, Register r) {
   // Doesn't exist apparently?
 }
 
@@ -2153,6 +2219,48 @@ ELF_DEF void gen_pop_16(Bytes *s, Register r) {
   }
 }
 
+ELF_DEF void gen_jmp_r_16(Bytes *s, Register r) {
+  switch (r) {
+  case AX:   append_bytes(s, "\x66\xff\xe0",     3); break;
+  case BX:   append_bytes(s, "\x66\xff\xe3",     3); break;
+  case CX:   append_bytes(s, "\x66\xff\xe1",     3); break;
+  case DX:   append_bytes(s, "\x66\xff\xe2",     3); break;
+  case SI:   append_bytes(s, "\x66\xff\xe6",     3); break;
+  case DI:   append_bytes(s, "\x66\xff\xe7",     3); break;
+  case BP:   append_bytes(s, "\x66\xff\xe5",     3); break;
+  case SP:   append_bytes(s, "\x66\xff\xe4",     3); break;
+  case R8W:  append_bytes(s, "\x66\x41\xff\xe0", 4); break;
+  case R9W:  append_bytes(s, "\x66\x41\xff\xe1", 4); break;
+  case R10W: append_bytes(s, "\x66\x41\xff\xe2", 4); break;
+  case R11W: append_bytes(s, "\x66\x41\xff\xe3", 4); break;
+  case R12W: append_bytes(s, "\x66\x41\xff\xe4", 4); break;
+  case R13W: append_bytes(s, "\x66\x41\xff\xe5", 4); break;
+  case R14W: append_bytes(s, "\x66\x41\xff\xe6", 4); break;
+  case R15W: append_bytes(s, "\x66\x41\xff\xe7", 4); break;
+  }
+}
+
+ELF_DEF void gen_call_r_16(Bytes *s, Register r) {
+  switch (r) {
+  case AX:   append_bytes(s, "\x66\xff\xd0",     3); break;
+  case BX:   append_bytes(s, "\x66\xff\xd3",     3); break;
+  case CX:   append_bytes(s, "\x66\xff\xd1",     3); break;
+  case DX:   append_bytes(s, "\x66\xff\xd2",     3); break;
+  case SI:   append_bytes(s, "\x66\xff\xd6",     3); break;
+  case DI:   append_bytes(s, "\x66\xff\xd7",     3); break;
+  case BP:   append_bytes(s, "\x66\xff\xd5",     3); break;
+  case SP:   append_bytes(s, "\x66\xff\xd4",     3); break;
+  case R8W:  append_bytes(s, "\x66\x41\xff\xd0", 4); break;
+  case R9W:  append_bytes(s, "\x66\x41\xff\xd1", 4); break;
+  case R10W: append_bytes(s, "\x66\x41\xff\xd2", 4); break;
+  case R11W: append_bytes(s, "\x66\x41\xff\xd3", 4); break;
+  case R12W: append_bytes(s, "\x66\x41\xff\xd4", 4); break;
+  case R13W: append_bytes(s, "\x66\x41\xff\xd5", 4); break;
+  case R14W: append_bytes(s, "\x66\x41\xff\xd6", 4); break;
+  case R15W: append_bytes(s, "\x66\x41\xff\xd7", 4); break;
+  }
+}
+
 // ************************* 8-bits *************************
 ELF_DEF void gen_add_r_imm_8(Bytes *s, Register r, char add) {
   switch (r) {
@@ -2619,6 +2727,14 @@ ELF_DEF void gen_cmp_r_imm_8(Bytes *s, Register r, char cmp) {
 }
 
 ELF_DEF void gen_pop_8(Bytes *s, Register r) {
+  // Doesn't exist apparently?
+}
+
+ELF_DEF void gen_jmp_r_8(Bytes *s, Register r) {
+  // Doesn't exist apparently?
+}
+
+ELF_DEF void gen_call_r_8(Bytes *s, Register r) {
   // Doesn't exist apparently?
 }
 
