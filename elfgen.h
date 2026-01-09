@@ -188,6 +188,7 @@ ELF_DEF void gen_sar_64_r_cl(Bytes *s, Register r);
 ELF_DEF void gen_cmp_64_r_imm_short_form(Bytes *s, Register r, char cmp);
 ELF_DEF void gen_cmp_64_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
+ELF_DEF void gen_push_64(Bytes *s, Register r);
 ELF_DEF void gen_pop_64(Bytes *s, Register r);
 
 ELF_DEF void gen_jmp_r_64(Bytes *s, Register r);
@@ -234,6 +235,7 @@ ELF_DEF void gen_sar_32_r_cl(Bytes *s, Register r);
 ELF_DEF void gen_cmp_32_r_imm_short_form(Bytes *s, Register r, char cmp);
 ELF_DEF void gen_cmp_32_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
+ELF_DEF void gen_push_32(Bytes *s, Register r);
 ELF_DEF void gen_pop_32(Bytes *s, Register r);
 
 ELF_DEF void gen_jmp_r_32(Bytes *s, Register r);
@@ -280,6 +282,7 @@ ELF_DEF void gen_sar_16_r_cl(Bytes *s, Register r);
 ELF_DEF void gen_cmp_16_r_imm_short_form(Bytes *s, Register r, char cmp);
 ELF_DEF void gen_cmp_16_r_imm_long_form(Bytes *s, Register r, size_t cmp);
 
+ELF_DEF void gen_push_16(Bytes *s, Register r);
 ELF_DEF void gen_pop_16(Bytes *s, Register r);
 
 ELF_DEF void gen_jmp_r_16(Bytes *s, Register r);
@@ -317,6 +320,7 @@ ELF_DEF void gen_sar_8_r_cl(Bytes *s, Register r);
 
 ELF_DEF void gen_cmp_r_imm_8(Bytes *s, Register r, char cmp);
 
+ELF_DEF void gen_push_8(Bytes *s, Register r);
 ELF_DEF void gen_pop_8(Bytes *s, Register r);
 
 ELF_DEF void gen_jmp_r_8(Bytes *s, Register r);
@@ -1013,6 +1017,27 @@ ELF_DEF void gen_cmp_64_r_imm_long_form(Bytes *s, Register r, size_t cmp) {
   gen_little_endian(s, cmp, 4);
 }
 
+ELF_DEF void gen_push_64(Bytes *s, Register r) {
+  switch (r) {
+  case RAX: da_append(s,    0x50);          break;
+  case RBX: da_append(s,    0x53);          break;
+  case RCX: da_append(s,    0x51);          break;
+  case RDX: da_append(s,    0x52);          break;
+  case RSI: da_append(s,    0x56);          break;
+  case RDI: da_append(s,    0x57);          break;
+  case RBP: da_append(s,    0x55);          break;
+  case RSP: da_append(s,    0x54);          break;
+  case R8:  append_bytes(s, "\x41\x50", 2); break;
+  case R9:  append_bytes(s, "\x41\x51", 2); break;
+  case R10: append_bytes(s, "\x41\x52", 2); break;
+  case R11: append_bytes(s, "\x41\x53", 2); break;
+  case R12: append_bytes(s, "\x41\x54", 2); break;
+  case R13: append_bytes(s, "\x41\x55", 2); break;
+  case R14: append_bytes(s, "\x41\x56", 2); break;
+  case R15: append_bytes(s, "\x41\x57", 2); break;
+  }
+}
+
 ELF_DEF void gen_pop_64(Bytes *s, Register r) {
   switch (r) {
   case rax: da_append(s, 0x58); break;
@@ -1632,6 +1657,10 @@ ELF_DEF void gen_cmp_32_r_imm_long_form(Bytes *s, Register r, size_t cmp) {
   gen_little_endian(s, cmp, 4);
 }
 
+ELF_DEF void gen_push_32(Bytes *s, Register r) {
+  // Doesn't exist apparently?
+}
+
 ELF_DEF void gen_pop_32(Bytes *s, Register r) {
   // Doesn't exist apparently?
 }
@@ -2198,6 +2227,27 @@ ELF_DEF void gen_cmp_16_r_imm_long_form(Bytes *s, Register r, size_t cmp) {
   gen_little_endian(s, cmp, 2);
 }
 
+ELF_DEF void gen_push_16(Bytes *s, Register r) {
+  switch (r) {
+  case AX:   append_bytes(s, "\x66\x50",     2); break;
+  case BX:   append_bytes(s, "\x66\x53",     2); break;
+  case CX:   append_bytes(s, "\x66\x51",     2); break;
+  case DX:   append_bytes(s, "\x66\x52",     2); break;
+  case SI:   append_bytes(s, "\x66\x56",     2); break;
+  case DI:   append_bytes(s, "\x66\x57",     2); break;
+  case BP:   append_bytes(s, "\x66\x55",     2); break;
+  case SP:   append_bytes(s, "\x66\x54",     2); break;
+  case R8W:  append_bytes(s, "\x66\x41\x50", 3); break;
+  case R9W:  append_bytes(s, "\x66\x41\x51", 3); break;
+  case R10W: append_bytes(s, "\x66\x41\x52", 3); break;
+  case R11W: append_bytes(s, "\x66\x41\x53", 3); break;
+  case R12W: append_bytes(s, "\x66\x41\x54", 3); break;
+  case R13W: append_bytes(s, "\x66\x41\x55", 3); break;
+  case R14W: append_bytes(s, "\x66\x41\x56", 3); break;
+  case R15W: append_bytes(s, "\x66\x41\x57", 3); break;
+  }
+}
+
 ELF_DEF void gen_pop_16(Bytes *s, Register r) {
   switch (r) {
   case AX:   append_bytes(s, "\x66\x58",     2); break;
@@ -2724,6 +2774,10 @@ ELF_DEF void gen_cmp_r_imm_8(Bytes *s, Register r, char cmp) {
   }
 
   da_append(s, cmp);
+}
+
+ELF_DEF void gen_push_8(Bytes *s, Register r) {
+  // Doesn't exist apparently?
 }
 
 ELF_DEF void gen_pop_8(Bytes *s, Register r) {
