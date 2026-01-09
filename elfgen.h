@@ -118,6 +118,10 @@ ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len);
   some reason, that seems to be treated as something special.
  */
 
+// ************************* ret etc *************************
+ELF_DEF void gen_ret(Bytes *s);
+ELF_DEF void gen_ret_imm(Bytes *s, size_t ret);
+
 // ************************* jmp etc *************************
 ELF_DEF void gen_jmp_imm_short_form(Bytes *s, char jmp);
 ELF_DEF void gen_jmp_imm_long_form(Bytes *s, size_t jmp);
@@ -321,6 +325,16 @@ ELF_DEF void gen_little_endian(Bytes *s, size_t big_endian, size_t len) {
     char c = (big_endian >> (i * 8)) & 0xFF;
     da_append(s, c);
   }
+}
+
+// ************************* ret etc *************************
+ELF_DEF void gen_ret(Bytes *s) {
+  da_append(s, 0xc3);
+}
+
+ELF_DEF void gen_ret_imm(Bytes *s, size_t ret) {
+  da_append(s, 0xc2);
+  gen_little_endian(s, ret, 2);
 }
 
 // ************************* jmp etc *************************
