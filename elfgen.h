@@ -130,6 +130,19 @@ ELF_DEF void gen_jne_imm_long_form(Bytes *s, size_t jne);
 
 ELF_DEF void gen_jg_imm_short_form(Bytes *s, char jg);
 ELF_DEF void gen_jg_imm_long_form(Bytes *s, size_t jg);
+
+ELF_DEF void gen_jge_imm_short_form(Bytes *s, char jge);
+ELF_DEF void gen_jge_imm_long_form(Bytes *s, size_t jge);
+
+ELF_DEF void gen_jl_imm_short_form(Bytes *s, char jl);
+ELF_DEF void gen_jl_imm_long_form(Bytes *s, size_t jl);
+
+ELF_DEF void gen_jle_imm_short_form(Bytes *s, char jle);
+ELF_DEF void gen_jle_imm_long_form(Bytes *s, size_t jle);
+
+ELF_DEF void gen_call_imm_short_form(Bytes *s, char call);
+ELF_DEF void gen_call_imm_long_form(Bytes *s, size_t call);
+
 // ************************* 64-bits *************************
 ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add);
 ELF_DEF void gen_add_64_r_imm_long_form(Bytes *s, Register r, size_t add);
@@ -350,6 +363,49 @@ ELF_DEF void gen_jg_imm_long_form(Bytes *s, size_t jg) {
   append_bytes(s, "\x0f\x8f", 2);
   gen_little_endian(s, jg - 6, 4);
 }
+
+ELF_DEF void gen_jge_imm_short_form(Bytes *s, char jge) {
+  da_append(s, 0x7d);
+  da_append(s, jge - 2);
+}
+
+ELF_DEF void gen_jge_imm_long_form(Bytes *s, size_t jge) {
+  append_bytes(s, "\x0f\x8d", 2);
+  gen_little_endian(s, jge - 6, 4);
+}
+
+ELF_DEF void gen_jl_imm_short_form(Bytes *s, char jl) {
+  da_append(s, 0x7c);
+  da_append(s, jl - 2);
+}
+
+ELF_DEF void gen_jl_imm_long_form(Bytes *s, size_t jl) {
+  append_bytes(s, "\x0f\x8c", 2);
+  gen_little_endian(s, jl - 6, 4);
+}
+
+ELF_DEF void gen_jle_imm_short_form(Bytes *s, char jle) {
+  da_append(s, 0x7e);
+  da_append(s, jle - 2);
+  
+}
+
+ELF_DEF void gen_jle_imm_long_form(Bytes *s, size_t jle) {
+  append_bytes(s, "\x0f\x8e", 2);
+  gen_little_endian(s, jle - 6, 4);
+  
+}
+
+ELF_DEF void gen_call_imm_short_form(Bytes *s, char call) {
+  // Apparently doesn/t exist?
+}
+
+ELF_DEF void gen_call_imm_long_form(Bytes *s, size_t call) {
+  da_append(s, 0xe8);
+  gen_little_endian(s, call - 5, 4);
+  
+}
+
 // ************************* 64-bits *************************
 ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add) {
   switch (r) {
