@@ -147,6 +147,9 @@ ELF_DEF void gen_jle_imm_long_form(Bytes *s, size_t jle);
 ELF_DEF void gen_call_imm_short_form(Bytes *s, char call);
 ELF_DEF void gen_call_imm_long_form(Bytes *s, size_t call);
 
+ELF_DEF void gen_push_imm_short_form(Bytes *s, char push);
+ELF_DEF void gen_push_imm_long_form(Bytes *s, size_t push);
+
 // ************************* 64-bits *************************
 ELF_DEF void gen_add_64_r_imm_short_form(Bytes *s, Register r, char add);
 ELF_DEF void gen_add_64_r_imm_long_form(Bytes *s, Register r, size_t add);
@@ -418,6 +421,16 @@ ELF_DEF void gen_call_imm_long_form(Bytes *s, size_t call) {
   da_append(s, 0xe8);
   gen_little_endian(s, call - 5, 4);
   
+}
+
+ELF_DEF void gen_push_imm_short_form(Bytes *s, char push) {
+  da_append(s, 0x6a);
+  da_append(s, push);
+}
+
+ELF_DEF void gen_push_imm_long_form(Bytes *s, size_t push) {
+  da_append(s, 0x68);
+  gen_little_endian(s, push, 4);
 }
 
 // ************************* 64-bits *************************
