@@ -276,6 +276,40 @@ ELF_DEF void gen_jmp_r_32(Bytes *s, Register r);
 
 ELF_DEF void gen_call_r_32(Bytes *s, Register r);
 
+ELF_DEF void gen_add_eax_r(Bytes *s, Register r);
+ELF_DEF void gen_add_ebx_r(Bytes *s, Register r);
+ELF_DEF void gen_add_ecx_r(Bytes *s, Register r);
+ELF_DEF void gen_add_edx_r(Bytes *s, Register r);
+ELF_DEF void gen_add_esi_r(Bytes *s, Register r);
+ELF_DEF void gen_add_edi_r(Bytes *s, Register r);
+ELF_DEF void gen_add_ebp_r(Bytes *s, Register r);
+ELF_DEF void gen_add_esp_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r8d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r9d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r10d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r11d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r12d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r13d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r14d_r(Bytes *s, Register r);
+ELF_DEF void gen_add_r15d_r(Bytes *s, Register r);
+
+ELF_DEF void gen_sub_eax_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_ebx_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_ecx_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_edx_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_esi_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_edi_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_ebp_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_esp_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r8d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r9d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r10d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r11d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r12d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r13d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r14d_r(Bytes *s, Register r);
+ELF_DEF void gen_sub_r15d_r(Bytes *s, Register r);
+
 #define gen_little_endian_32(s, big_endian) gen_little_endian(s, big_endian, 4)
 
 // ************************* 16-bits *************************
@@ -419,7 +453,7 @@ ELF_DEF void gen_je_imm_short_form(Bytes *s, char je) {
 }
 
 ELF_DEF void gen_je_imm_long_form(Bytes *s, size_t je) {
-  append_byets(s, "\x0f\x84", 2);
+  append_bytes(s, "\x0f\x84", 2);
   gen_little_endian(s, je - 6, 4);
 }
 
@@ -1074,22 +1108,22 @@ ELF_DEF void gen_push_64(Bytes *s, Register r) {
 
 ELF_DEF void gen_pop_64(Bytes *s, Register r) {
   switch (r) {
-  case rax: da_append(s, 0x58); break;
-  case rbx: da_append(s, 0x5b); break;
-  case rcx: da_append(s, 0x59); break;
-  case rdx: da_append(s, 0x5a); break;
-  case rsi: da_append(s, 0x5e); break;
-  case rdi: da_append(s, 0x5f); break;
-  case rbp: da_append(s, 0x5d); break;
-  case rsp: da_append(s, 0x5c); break;
-  case r8: append_bytes(s, "\x41\x58", 2); break;
-  case r9: append_bytes(s, "\x41\x59", 2); break;
-  case r10: append_bytes(s, "\x41\x5a", 2); break;
-  case r11: append_bytes(s, "\x41\x5b", 2); break;
-  case r12: append_bytes(s, "\x41\x5c", 2); break;
-  case r13: append_bytes(s, "\x41\x5d", 2); break;
-  case r14: append_bytes(s, "\x41\x5e", 2); break;
-  case r15: append_bytes(s, "\x41\x5f", 2); break;
+  case RAX: da_append(s, 0x58); break;
+  case RBX: da_append(s, 0x5b); break;
+  case RCX: da_append(s, 0x59); break;
+  case RDX: da_append(s, 0x5a); break;
+  case RSI: da_append(s, 0x5e); break;
+  case RDI: da_append(s, 0x5f); break;
+  case RBP: da_append(s, 0x5d); break;
+  case RSP: da_append(s, 0x5c); break;
+  case R8: append_bytes(s, "\x41\x58", 2); break;
+  case R9: append_bytes(s, "\x41\x59", 2); break;
+  case R10: append_bytes(s, "\x41\x5a", 2); break;
+  case R11: append_bytes(s, "\x41\x5b", 2); break;
+  case R12: append_bytes(s, "\x41\x5c", 2); break;
+  case R13: append_bytes(s, "\x41\x5d", 2); break;
+  case R14: append_bytes(s, "\x41\x5e", 2); break;
+  case R15: append_bytes(s, "\x41\x5f", 2); break;
   }
 }
 
@@ -2377,6 +2411,678 @@ ELF_DEF void gen_jmp_r_32(Bytes *s, Register r) {
 
 ELF_DEF void gen_call_r_32(Bytes *s, Register r) {
   // Doesn't exist apparently?
+}
+
+ELF_DEF void gen_add_eax_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc0",     2); break;
+  case EBX:  append_bytes(s, "\x01\xd8",     2); break;
+  case ECX:  append_bytes(s, "\x01\xc8",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd0",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf0",     2); break;
+  case EDI:  append_bytes(s, "\x01\xf8",     2); break;
+  case EBP:  append_bytes(s, "\x01\xe8",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe0",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc0", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xc8", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd0", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xd8", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe0", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xe8", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf0", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xf8", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_ebx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc3",     2); break;
+  case EBX:  append_bytes(s, "\x01\xdb",     2); break;
+  case ECX:  append_bytes(s, "\x01\xcb",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd3",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf3",     2); break;
+  case EDI:  append_bytes(s, "\x01\xfb",     2); break;
+  case EBP:  append_bytes(s, "\x01\xeb",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe3",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc3", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xcb", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd3", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xdb", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe3", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xeb", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf3", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xfb", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_ecx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc1",     2); break;
+  case EBX:  append_bytes(s, "\x01\xd9",     2); break;
+  case ECX:  append_bytes(s, "\x01\xc9",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd1",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf1",     2); break;
+  case EDI:  append_bytes(s, "\x01\xf9",     2); break;
+  case EBP:  append_bytes(s, "\x01\xe9",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe1",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc1", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xc9", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd1", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xd9", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe1", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xe9", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf1", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xf9", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_edx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc2",     2); break;
+  case EBX:  append_bytes(s, "\x01\xda",     2); break;
+  case ECX:  append_bytes(s, "\x01\xca",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd2",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf2",     2); break;
+  case EDI:  append_bytes(s, "\x01\xfa",     2); break;
+  case EBP:  append_bytes(s, "\x01\xea",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe2",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc2", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xca", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd2", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xda", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe2", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xea", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf2", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xfa", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_esi_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc6",     2); break;
+  case EBX:  append_bytes(s, "\x01\xde",     2); break;
+  case ECX:  append_bytes(s, "\x01\xce",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd6",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf6",     2); break;
+  case EDI:  append_bytes(s, "\x01\xfe",     2); break;
+  case EBP:  append_bytes(s, "\x01\xee",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe6",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc6", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xce", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd6", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xde", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe6", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xee", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf6", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xfe", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_edi_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc7",     2); break;
+  case EBX:  append_bytes(s, "\x01\xdf",     2); break;
+  case ECX:  append_bytes(s, "\x01\xcf",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd7",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf7",     2); break;
+  case EDI:  append_bytes(s, "\x01\xff",     2); break;
+  case EBP:  append_bytes(s, "\x01\xef",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe7",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc7", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xcf", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd7", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xdf", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe7", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xef", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf7", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xff", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_ebp_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc5",     2); break;
+  case EBX:  append_bytes(s, "\x01\xdd",     2); break;
+  case ECX:  append_bytes(s, "\x01\xcd",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd5",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf5",     2); break;
+  case EDI:  append_bytes(s, "\x01\xfd",     2); break;
+  case EBP:  append_bytes(s, "\x01\xed",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe5",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc5", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xcd", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd5", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xdd", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe5", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xed", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf5", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xfd", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_esp_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x01\xc4",     2); break;
+  case EBX:  append_bytes(s, "\x01\xdc",     2); break;
+  case ECX:  append_bytes(s, "\x01\xcc",     2); break;
+  case EDX:  append_bytes(s, "\x01\xd4",     2); break;
+  case ESI:  append_bytes(s, "\x01\xf4",     2); break;
+  case EDI:  append_bytes(s, "\x01\xfc",     2); break;
+  case EBP:  append_bytes(s, "\x01\xec",     2); break;
+  case ESP:  append_bytes(s, "\x01\xe4",     2); break;
+  case R8D:  append_bytes(s, "\x44\x01\xc4", 3); break;
+  case R9D:  append_bytes(s, "\x44\x01\xcc", 3); break;
+  case R10D: append_bytes(s, "\x44\x01\xd4", 3); break;
+  case R11D: append_bytes(s, "\x44\x01\xdc", 3); break;
+  case R12D: append_bytes(s, "\x44\x01\xe4", 3); break;
+  case R13D: append_bytes(s, "\x44\x01\xec", 3); break;
+  case R14D: append_bytes(s, "\x44\x01\xf4", 3); break;
+  case R15D: append_bytes(s, "\x44\x01\xfc", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r8d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc0", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xd8", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xc8", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd0", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf0", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xf8", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xe8", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe0", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc0", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xc8", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd0", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xd8", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe0", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xe8", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf0", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xf8", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r9d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc1", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xd9", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xc9", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd1", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf1", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xf9", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xe9", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe1", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc1", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xc9", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd1", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xd9", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe1", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xe9", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf1", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xf9", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r10d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc2", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xda", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xca", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd2", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf2", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xfa", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xea", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe2", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc2", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xca", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd2", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xda", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe2", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xea", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf2", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xfa", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r11d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc3", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xdb", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xcb", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd3", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf3", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xfb", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xeb", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe3", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc3", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xcb", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd3", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xdb", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe3", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xeb", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf3", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xfb", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r12d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc4", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xdc", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xcc", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd4", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf4", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xfc", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xec", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe4", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc4", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xcc", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd4", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xdc", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe4", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xec", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf4", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xfc", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r13d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc5", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xdd", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xcd", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd5", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf5", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xfd", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xed", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe5", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc5", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xcd", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd5", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xdd", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe5", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xed", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf5", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xfd", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r14d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc6", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xde", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xce", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd6", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf6", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xfe", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xee", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe6", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc6", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xce", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd6", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xde", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe6", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xee", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf6", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xfe", 3); break;
+  }
+}
+
+ELF_DEF void gen_add_r15d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x01\xc7", 3); break;
+  case EBX: append_bytes(s, "\x41\x01\xdf", 3); break;
+  case ECX: append_bytes(s, "\x41\x01\xcf", 3); break;
+  case EDX: append_bytes(s, "\x41\x01\xd7", 3); break;
+  case ESI: append_bytes(s, "\x41\x01\xf7", 3); break;
+  case EDI: append_bytes(s, "\x41\x01\xff", 3); break;
+  case EBP: append_bytes(s, "\x41\x01\xef", 3); break;
+  case ESP: append_bytes(s, "\x41\x01\xe7", 3); break;
+  case R8D: append_bytes(s, "\x45\x01\xc7", 3); break;
+  case R9D: append_bytes(s, "\x45\x01\xcf", 3); break;
+  case R10D: append_bytes(s, "\x45\x01\xd7", 3); break;
+  case R11D: append_bytes(s, "\x45\x01\xdf", 3); break;
+  case R12D: append_bytes(s, "\x45\x01\xe7", 3); break;
+  case R13D: append_bytes(s, "\x45\x01\xef", 3); break;
+  case R14D: append_bytes(s, "\x45\x01\xf7", 3); break;
+  case R15D: append_bytes(s, "\x45\x01\xff", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_eax_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc0",     2); break;
+  case EBX:  append_bytes(s, "\x29\xd8",     2); break;
+  case ECX:  append_bytes(s, "\x29\xc8",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd0",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf0",     2); break;
+  case EDI:  append_bytes(s, "\x29\xf8",     2); break;
+  case EBP:  append_bytes(s, "\x29\xe8",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe0",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc0", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xc8", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd0", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xd8", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe0", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xe8", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf0", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xf8", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_ebx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc3",     2); break;
+  case EBX:  append_bytes(s, "\x29\xdb",     2); break;
+  case ECX:  append_bytes(s, "\x29\xcb",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd3",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf3",     2); break;
+  case EDI:  append_bytes(s, "\x29\xfb",     2); break;
+  case EBP:  append_bytes(s, "\x29\xeb",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe3",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc3", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xcb", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd3", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xdb", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe3", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xeb", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf3", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xfb", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_ecx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc1",     2); break;
+  case EBX:  append_bytes(s, "\x29\xd9",     2); break;
+  case ECX:  append_bytes(s, "\x29\xc9",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd1",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf1",     2); break;
+  case EDI:  append_bytes(s, "\x29\xf9",     2); break;
+  case EBP:  append_bytes(s, "\x29\xe9",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe1",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc1", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xc9", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd1", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xd9", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe1", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xe9", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf1", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xf9", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_edx_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc2",     2); break;
+  case EBX:  append_bytes(s, "\x29\xda",     2); break;
+  case ECX:  append_bytes(s, "\x29\xca",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd2",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf2",     2); break;
+  case EDI:  append_bytes(s, "\x29\xfa",     2); break;
+  case EBP:  append_bytes(s, "\x29\xea",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe2",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc2", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xca", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd2", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xda", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe2", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xea", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf2", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xfa", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_esi_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc6",     2); break;
+  case EBX:  append_bytes(s, "\x29\xde",     2); break;
+  case ECX:  append_bytes(s, "\x29\xce",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd6",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf6",     2); break;
+  case EDI:  append_bytes(s, "\x29\xfe",     2); break;
+  case EBP:  append_bytes(s, "\x29\xee",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe6",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc6", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xce", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd6", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xde", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe6", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xee", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf6", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xfe", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_edi_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc7",     2); break;
+  case EBX:  append_bytes(s, "\x29\xdf",     2); break;
+  case ECX:  append_bytes(s, "\x29\xcf",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd7",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf7",     2); break;
+  case EDI:  append_bytes(s, "\x29\xff",     2); break;
+  case EBP:  append_bytes(s, "\x29\xef",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe7",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc7", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xcf", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd7", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xdf", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe7", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xef", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf7", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xff", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_ebp_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc5",     2); break;
+  case EBX:  append_bytes(s, "\x29\xdd",     2); break;
+  case ECX:  append_bytes(s, "\x29\xcd",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd5",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf5",     2); break;
+  case EDI:  append_bytes(s, "\x29\xfd",     2); break;
+  case EBP:  append_bytes(s, "\x29\xed",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe5",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc5", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xcd", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd5", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xdd", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe5", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xed", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf5", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xfd", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_esp_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX:  append_bytes(s, "\x29\xc4",     2); break;
+  case EBX:  append_bytes(s, "\x29\xdc",     2); break;
+  case ECX:  append_bytes(s, "\x29\xcc",     2); break;
+  case EDX:  append_bytes(s, "\x29\xd4",     2); break;
+  case ESI:  append_bytes(s, "\x29\xf4",     2); break;
+  case EDI:  append_bytes(s, "\x29\xfc",     2); break;
+  case EBP:  append_bytes(s, "\x29\xec",     2); break;
+  case ESP:  append_bytes(s, "\x29\xe4",     2); break;
+  case R8D:  append_bytes(s, "\x44\x29\xc4", 3); break;
+  case R9D:  append_bytes(s, "\x44\x29\xcc", 3); break;
+  case R10D: append_bytes(s, "\x44\x29\xd4", 3); break;
+  case R11D: append_bytes(s, "\x44\x29\xdc", 3); break;
+  case R12D: append_bytes(s, "\x44\x29\xe4", 3); break;
+  case R13D: append_bytes(s, "\x44\x29\xec", 3); break;
+  case R14D: append_bytes(s, "\x44\x29\xf4", 3); break;
+  case R15D: append_bytes(s, "\x44\x29\xfc", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r8d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc0", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xd8", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xc8", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd0", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf0", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xf8", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xe8", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe0", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc0", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xc8", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd0", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xd8", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe0", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xe8", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf0", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xf8", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r9d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc1", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xd9", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xc9", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd1", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf1", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xf9", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xe9", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe1", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc1", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xc9", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd1", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xd9", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe1", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xe9", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf1", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xf9", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r10d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc2", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xda", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xca", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd2", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf2", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xfa", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xea", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe2", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc2", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xca", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd2", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xda", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe2", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xea", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf2", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xfa", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r11d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc3", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xdb", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xcb", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd3", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf3", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xfb", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xeb", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe3", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc3", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xcb", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd3", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xdb", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe3", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xeb", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf3", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xfb", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r12d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc4", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xdc", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xcc", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd4", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf4", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xfc", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xec", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe4", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc4", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xcc", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd4", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xdc", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe4", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xec", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf4", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xfc", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r13d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc5", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xdd", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xcd", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd5", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf5", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xfd", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xed", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe5", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc5", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xcd", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd5", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xdd", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe5", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xed", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf5", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xfd", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r14d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc6", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xde", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xce", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd6", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf6", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xfe", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xee", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe6", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc6", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xce", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd6", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xde", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe6", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xee", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf6", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xfe", 3); break;
+  }
+}
+
+ELF_DEF void gen_sub_r15d_r(Bytes *s, Register r) {
+  switch (r) {
+  case EAX: append_bytes(s, "\x41\x29\xc7", 3); break;
+  case EBX: append_bytes(s, "\x41\x29\xdf", 3); break;
+  case ECX: append_bytes(s, "\x41\x29\xcf", 3); break;
+  case EDX: append_bytes(s, "\x41\x29\xd7", 3); break;
+  case ESI: append_bytes(s, "\x41\x29\xf7", 3); break;
+  case EDI: append_bytes(s, "\x41\x29\xff", 3); break;
+  case EBP: append_bytes(s, "\x41\x29\xef", 3); break;
+  case ESP: append_bytes(s, "\x41\x29\xe7", 3); break;
+  case R8D: append_bytes(s, "\x45\x29\xc7", 3); break;
+  case R9D: append_bytes(s, "\x45\x29\xcf", 3); break;
+  case R10D: append_bytes(s, "\x45\x29\xd7", 3); break;
+  case R11D: append_bytes(s, "\x45\x29\xdf", 3); break;
+  case R12D: append_bytes(s, "\x45\x29\xe7", 3); break;
+  case R13D: append_bytes(s, "\x45\x29\xef", 3); break;
+  case R14D: append_bytes(s, "\x45\x29\xf7", 3); break;
+  case R15D: append_bytes(s, "\x45\x29\xff", 3); break;
+  }
 }
 
 // ************************* 16-bits *************************
